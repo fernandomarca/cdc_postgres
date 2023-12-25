@@ -1,0 +1,22 @@
+version: "3.9"
+name: cdc_postgres
+
+services:
+  db:
+    container_name: cdc_postgres-db
+    build: .docker/postgres
+    # restart: always
+    # tty: true
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./.docker/pgdata:/var/lib/postgresql/data/pgdata
+    security_opt:
+      - seccomp:unconfined
+    environment:
+      POSTGRES_PASSWORD: "123456"
+      POSTGRES_USER: "postgres"
+      POSTGRES_DB: "postgres"
+      PGDATA: /tmp
+    command: >
+      postgres -c shared_preload_libraries=pgaudit
